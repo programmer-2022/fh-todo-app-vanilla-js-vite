@@ -1,11 +1,5 @@
 import { Todo } from "../todos/models/todo.model";
-import { TodoListKey } from "../utils/constantes";
-
-const Filters = {
-  all: "All",
-  completed: "Completed",
-  pending: "Pending",
-};
+import { Filters, TodoListKey } from "../utils/constantes";
 
 let state = {
   todos: [],
@@ -50,12 +44,10 @@ const deleteTodo = (todoID) => {
 };
 
 const deleteCompleted = () => {
-  state.todos = state.todos.filter((todo) => todo.done);
+  state.todos = state.todos.filter((todo) => !todo.done);
 };
 
 const setFilter = (filter = Filters.all) => {
-  if (Filters[filter] === undefined)
-    throw new Error(`${filter} is not valid filter.`);
   state.filter = filter;
 };
 
