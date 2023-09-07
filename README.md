@@ -16,3 +16,7 @@ se hace mediante el uso de LocalStorage del navegador web.
 ```js
   npm run dev
 ```
+
+##### 3. Ingresar al navegador de preferencia con la siguiente ruta
+
+http://localhost:5173/
