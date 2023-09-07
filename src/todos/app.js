@@ -1,9 +1,13 @@
 import html from "./app.component.html?raw";
 import todoStore from "../store/todo.store";
-import { NewTodoInputCSSClass, TodoListCSSClass } from "../utils/constantes";
+import {
+  NewTodoInputCSSClass,
+  TodoListCSSClass,
+  TodoListKey,
+} from "../utils/constantes";
 import { renderTodos } from "./use-cases";
 
-export const App = (elementID) => {
+export const App = (root) => {
   const displayTodos = () => {
     const todos = todoStore.getTodos(todoStore.getCurrentFilter());
     renderTodos(TodoListCSSClass, todos);
@@ -12,9 +16,8 @@ export const App = (elementID) => {
   (() => {
     const app = document.createElement("div");
     app.innerHTML = html;
-    document.querySelector(elementID).append(app);
-
-    todoStore.agregarListaTodosxDefecto();
+    document.querySelector(root).append(app);
+    todoStore.getTodosFromLocalStorage(TodoListKey);
     displayTodos();
   })();
 
