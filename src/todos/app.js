@@ -4,6 +4,11 @@ import {
   NewTodoInputCSSClass,
   TodoListCSSClass,
   TodoListKey,
+  ClearAllCompletedId,
+  Filters,
+  FILTRO_COMPLETADOS,
+  FILTRO_TODOS,
+  FILTRO_PENDIENTES,
 } from "../utils/constantes";
 import { renderTodos } from "./use-cases";
 
@@ -24,6 +29,7 @@ export const App = (root) => {
   // Referencias HTML
   const newDescriptionInput = document.querySelector(NewTodoInputCSSClass);
   const todoListUL = document.querySelector(TodoListCSSClass);
+  const btnClearCompleted = document.querySelector(ClearAllCompletedId);
 
   // InputText Listener
   newDescriptionInput.addEventListener("keyup", ({ key, target }) => {
@@ -60,5 +66,27 @@ export const App = (root) => {
       todoStore.deleteTodo(todoId);
       displayTodos();
     }
+  });
+
+  // Clear completed button listener
+  btnClearCompleted.addEventListener("click", () => {
+    todoStore.deleteCompleted();
+    displayTodos();
+  });
+
+  // Evento botones filtro
+  document.querySelectorAll(".filtro").forEach((buttonFilterElement) => {
+    buttonFilterElement.addEventListener("click", ({ target }) => {
+      const filterMap = {
+        [FILTRO_TODOS]: Filters.all,
+        [FILTRO_PENDIENTES]: Filters.pending,
+        [FILTRO_COMPLETADOS]: Filters.completed,
+      };
+
+      if (filterMap.hasOwnProperty(target.text)) {
+        todoStore.setFilter(filterMap[target.text]);
+      }
+      displayTodos();
+    });
   });
 };
