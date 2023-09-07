@@ -1,4 +1,5 @@
 import { Todo } from "../todos/models/todo.model";
+import { TodoListKey } from "../utils/constantes";
 
 const Filters = {
   all: "All",
@@ -6,28 +7,9 @@ const Filters = {
   pending: "Pending",
 };
 
-const state = {
+let state = {
   todos: [],
   filter: Filters.all,
-};
-
-const initStore = () => {
-  console.table(state.todos);
-};
-
-const loadStore = () => {
-  console.log("Load");
-};
-
-const agregarListaTodosxDefecto = () => {
-  state.todos.push(
-    new Todo("Estudiar programación"),
-    new Todo("Crear un TODO usando React JS"),
-    new Todo("Agendar cita Médica"),
-    new Todo("Organizar ideas proyecto personal"),
-    new Todo("Crear un portfolio")
-  );
-  initStore();
 };
 
 const getTodos = (filter = Filters.all) => {
@@ -45,7 +27,9 @@ const getTodos = (filter = Filters.all) => {
 
 const addTodo = (description) => {
   if (!description) throw new Error("Description is required");
-  state.todos.push(new Todo(description));
+  let newTodo = new Todo(description);
+  state.todos.push(newTodo);
+  saveTodoToLocalStorage(TodoListKey, state.todos);
 };
 
 const toggleTodo = (todoID) => {
@@ -62,6 +46,7 @@ const toggleTodo = (todoID) => {
 
 const deleteTodo = (todoID) => {
   state.todos = state.todos.filter((todo) => todo.id !== todoID);
+  saveTodoToLocalStorage(TodoListKey, state.todos);
 };
 
 const deleteCompleted = () => {
@@ -78,9 +63,20 @@ const getCurrentFilter = () => {
   return state.filter;
 };
 
+const saveTodoToLocalStorage = (keyValue, payload) => {
+  localStorage.setItem(keyValue, JSON.stringify(payload));
+};
+
+const getTodosFromLocalStorage = (keyValue) => {
+  const data = localStorage.getItem(keyValue);
+
+  if (!data) return;
+
+  const todo = JSON.parse(localStorage.getItem(keyValue));
+  state.todos = todo;
+};
+
 export default {
-  initStore,
-  loadStore,
   getTodos,
   addTodo,
   toggleTodo,
@@ -88,5 +84,5 @@ export default {
   deleteCompleted,
   setFilter,
   getCurrentFilter,
-  agregarListaTodosxDefecto,
+  getTodosFromLocalStorage,
 };
