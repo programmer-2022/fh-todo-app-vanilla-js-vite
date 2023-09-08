@@ -9,13 +9,19 @@ import {
   FILTRO_COMPLETADOS,
   FILTRO_TODOS,
   FILTRO_PENDIENTES,
+  PENDING_COUNT_LABEL,
 } from "../utils/constantes";
-import { renderTodos } from "./use-cases";
+import { renderPending, renderTodos } from "./use-cases";
 
 export const App = (root) => {
   const displayTodos = () => {
     const todos = todoStore.getTodos(todoStore.getCurrentFilter());
     renderTodos(TodoListCSSClass, todos);
+    updatePendingCountLabel();
+  };
+
+  const updatePendingCountLabel = () => {
+    renderPending(PENDING_COUNT_LABEL);
   };
 
   (() => {
